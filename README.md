@@ -1,23 +1,21 @@
-# 🧾 KasirGratisan
+# 🧾 FreePOS (v2.0)
 
-A free, offline-first, open source Point of Sale (POS) Progressive Web App built for Indonesian Micro, Small, and Medium Enterprises (UMKM). All data is stored locally on the user's device — no server, no registration, no cost.
+**FreePOS** adalah aplikasi kasir (Point of Sale) gratis, *offline-first*, dan *mobile-first* yang dirancang khusus untuk UMKM (Usaha Mikro, Kecil, dan Menengah) di Indonesia. Semua data disimpan secara lokal di perangkat pengguna — **tanpa server, tanpa pendaftaran, dan 100% gratis**.
 
 ---
 
-## ✨ Features
+## ✨ Fitur Unggulan
 
-- **POS / Cashier** — Full cashier interface with cart, per-item & per-transaction discounts, payment method selection, and automatic change calculation
-- **Product Management** — Complete CRUD with categories, SKU, units, photos, and barcode support
-- **Stock Management** — Stock in (from suppliers) and stock out (damaged, lost, returned, etc.)
-- **Automatic COGS (HPP)** — Cost of Goods Sold is automatically calculated using the weighted average method on each stock-in
-- **Sales Reports** — 7/30 day sales charts, top products, total revenue & profit
-- **Transaction History** — Browse completed transactions
-- **Supplier Management** — Manage supplier contacts and details
-- **Backup & Restore** — Export/import all data as JSON, with automatic backup reminders
-- **PWA** — Installable to home screen, fully offline with Service Worker (Workbox)
-- **Onboarding** — Interactive tutorial for first-time users
-- **Dark Mode** — Full dark theme support
-- **Theme Customization** — Pick your preferred accent color
+- **Varian Produk (Baru!)** — Kelola satu produk dengan banyak pilihan (ukuran, warna, rasa) dengan harga dan stok terpisah.
+- **Batalkan Transaksi (Baru!)** — Fitur pembatalan transaksi (Void) yang otomatis mengembalikan stok ke gudang.
+- **PIN Keamanan (Baru!)** — Lindungi data bisnis bapak dengan PIN 4 digit saat membuka aplikasi.
+- **Ekspor Laporan (Baru!)** — Download laporan penjualan dan detail produk dalam format **Excel** dan **PDF**.
+- **Kasir (POS)** — Interface kasir lengkap dengan keranjang, diskon per item/transaksi, dan kalkulasi kembalian otomatis.
+- **Manajemen Stok** — Catat barang masuk dari supplier dan barang keluar (rusak, hilang, retur).
+- **HPP Otomatis & Manual** — Harga Pokok Penjualan dihitung otomatis (Weighted Average) atau bisa dikoreksi secara manual.
+- **Laporan Penjualan** — Grafik tren 7/30 hari, produk terlaris, total pendapatan, dan laba kotor.
+- **PWA (Progressive Web App)** — Bisa di-install ke Home Screen HP dan diakses penuh secara offline.
+- **Backup & Restore** — Ekspor/Impor seluruh data dalam format JSON untuk keamanan data jangka panjang.
 
 ---
 
@@ -30,139 +28,60 @@ A free, offline-first, open source Point of Sale (POS) Progressive Web App built
 | Styling | Tailwind CSS + shadcn/ui |
 | Database | IndexedDB via Dexie.js |
 | Charts | Recharts |
-| Routing | React Router DOM v6 |
 | Icons | Lucide React |
 | PWA | vite-plugin-pwa (Workbox) |
-| Font | Plus Jakarta Sans |
+| Export | SheetJS (XLSX) & jsPDF |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Memulai (Getting Started)
 
-### Prerequisites
+### Prasyarat
+- [Node.js](https://nodejs.org/) v18+
+- npm, yarn, atau bun
 
-- [Node.js](https://nodejs.org/) v18+ (recommended via [nvm](https://github.com/nvm-sh/nvm))
-- npm, yarn, or bun
-
-### Installation
-
+### Instalasi Lokal
 ```bash
-# Clone the repository
-git clone https://github.com/user/kasirgratisan.git
-cd kasirgratisan
+# Clone repository
+git clone https://github.com/azizt91/freepos.git
+cd freepos
 
-# Install dependencies
+# Install dependensi
 npm install
 
-# Start the development server
+# Jalankan server development
 npm run dev
 ```
-
-The app will be running at `http://localhost:8080`.
-
-### Production Build
-
-```bash
-npm run build
-npm run preview
-```
+Aplikasi akan berjalan di `http://localhost:8080`.
 
 ---
 
-## 📁 Project Structure
+## 💾 Penyimpanan Data
 
-```
-src/
-├── App.tsx                  # Root component & routing
-├── main.tsx                 # Entry point
-├── index.css                # Design tokens (HSL CSS variables)
-├── lib/
-│   ├── db.ts                # Dexie database schema, interfaces, seed data
-│   └── utils.ts             # Utility functions
-├── components/
-│   ├── layout/
-│   │   ├── AppLayout.tsx    # Main layout with bottom navigation
-│   │   └── BottomNav.tsx    # Bottom nav (5 tabs, center cashier CTA)
-│   ├── Onboarding.tsx       # First-run tutorial & store setup
-│   ├── BackupReminder.tsx   # Backup reminder & export utility
-│   ├── Receipt.tsx          # Receipt component
-│   └── ui/                  # shadcn/ui components
-├── pages/
-│   ├── Dashboard.tsx        # Home: stats, quick actions, low stock alerts
-│   ├── Cashier.tsx          # POS / cashier interface
-│   ├── Products.tsx         # Product CRUD
-│   ├── Reports.tsx          # Sales reports & charts
-│   ├── Settings.tsx         # Settings (store, payments, categories, backup)
-│   ├── Supplier.tsx         # Supplier CRUD
-│   ├── StockIn.tsx          # Stock in + COGS calculation
-│   ├── StockOut.tsx         # Stock out
-│   └── TransactionHistory.tsx # Transaction history
-└── hooks/                   # Custom React hooks
-```
+Seluruh data disimpan secara lokal di browser menggunakan **IndexedDB** (melalui Dexie.js). Tidak ada data yang dikirim ke server manapun, sehingga privasi data bapak 100% terjaga.
+
+### Tabel Database Utama
+- `products`: Master produk (termasuk flag `hasVariants`).
+- `productVariants`: Detail varian produk (nama, harga, stok, hpp).
+- `transactions`: Catatan penjualan (termasuk status `isCanceled`).
+- `transactionItems`: Detail item per transaksi.
+- `stockIns` & `stockOuts`: Riwayat pergerakan stok.
+- `storeSettings`: Pengaturan toko & PIN keamanan.
 
 ---
 
-## 💾 Database
+## 🤝 Kontribusi
 
-All data is stored locally in the browser using IndexedDB (via Dexie.js). No data is ever sent to any server.
+Kontribusi sangat diterima! Silakan ajukan **Pull Request** atau hubungi developer jika bapak memiliki ide fitur baru.
 
-### Tables
-
-| Table | Description |
-|-------|-------------|
-| `categories` | Product categories (name, color, icon) |
-| `products` | Master products (name, SKU, sell price, COGS, stock, unit) |
-| `suppliers` | Supplier data |
-| `stockIns` | Stock-in records |
-| `stockOuts` | Stock-out records |
-| `hppHistory` | COGS change audit trail |
-| `paymentMethods` | Payment methods (Cash, Bank Transfer, QRIS, etc.) |
-| `transactions` | Sales transactions |
-| `storeSettings` | Store settings & app state |
-
-### COGS Calculation (Weighted Average)
-
-When stock is received, COGS is automatically recalculated:
-
-```
-New COGS = ((Old Stock × Old COGS) + (New Qty × Buy Price)) / (Old Stock + New Qty)
-```
+- Seluruh UI menggunakan **Bahasa Indonesia**.
+- Gunakan komponen `shadcn/ui` yang sudah tersedia.
+- Nilai mata uang disimpan sebagai **Integer** (Rupiah).
+- Pastikan fitur baru tetap bekerja 100% secara offline.
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Here's how:
-
-1. Fork this repository
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature/new-feature`)
-5. Open a Pull Request
-
-### Guidelines
-
-- All UI text is in **Bahasa Indonesia** (the app targets Indonesian users)
-- Use existing `shadcn/ui` components from `src/components/ui/`
-- All monetary values are stored as integers (Indonesian Rupiah, no decimals)
-- Format numbers using `toLocaleString('id-ID')`
-- New features must work fully offline (no API calls)
-- Use `useLiveQuery()` from `dexie-react-hooks` for reactive data binding
-
----
-
-## 📋 Roadmap
-
-- [ ] Receipt printing (PDF/image, WhatsApp share, Bluetooth thermal printer)
-- [ ] Barcode/QR scanner via camera
-- [ ] Stock report (stock in vs out)
-- [ ] Manual COGS adjustment
-- [ ] Multi-language support (i18n)
-- [ ] Export reports to Excel/CSV
-
----
-
-## 📄 License
+## 📄 Lisensi
 
 [MIT License](LICENSE)
 
@@ -170,12 +89,6 @@ Contributions are welcome! Here's how:
 
 ## 🙏 Credits
 
-Built with ❤️ for Indonesian small businesses.
-
-- [React](https://react.dev/)
-- [Vite](https://vitejs.dev/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Dexie.js](https://dexie.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Lucide Icons](https://lucide.dev/)
-- [Recharts](https://recharts.org/)
+Dibangun dengan ❤️ untuk kemajuan UMKM Indonesia.
+- Pengembang: [azizt91](https://github.com/azizt91)
+- Support: [Traktir Kopi ☕](https://lynk.id/payme/azizt91)
