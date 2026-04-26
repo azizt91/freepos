@@ -130,13 +130,9 @@ export default function BarcodeScanner({ open, onClose, onScan }: BarcodeScanner
       }
     };
 
-    // CR-11: Increased delay to 600ms to ensure Dialog transition is complete
-    const timer = setTimeout(() => {
-      startScanner();
-    }, 600);
+    startScanner();
 
     return () => {
-      clearTimeout(timer);
       handleStop();
     };
   }, [open]);
